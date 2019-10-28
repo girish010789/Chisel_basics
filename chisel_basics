@@ -1,0 +1,31 @@
+##First module
+
+## Module is a build in class that all hardware modules needs to extend
+## We declare all our input and output using special val named io and it must be an IO object or instance
+## Bundle is struct equivalent in scala and it is used to create a hardware struct which contains all the input and output signals.
+## UInt is the data type with 4-bits wide. val is used to declare constant. 
+## the following code implements the 4-bit NOT gate in chisel using scala primitives and constructs, but with chisel classes and user defined primitives/data-types.
+
+class Module_basic extends Module {
+val io = IO(new bundle {
+  val in = Input(UInt(4,W))
+  val out = Output(UInt(4,W))
+})
+  io.out = ~io.in
+}
+
+## the following statement is used to generate verilog code from chisel code. Running this code will generate the below output
+println(getVerilog(new Passthrough))
+
+[info] [0.000] Elaborating design...
+[info] [0.028] Done elaborating.
+Total FIRRTL Compile Time: 29.5 ms
+module cmd5HelperPassthrough(
+  input        clock,
+  input        reset,
+  input  [3:0] io_in,
+  output [3:0] io_out
+);
+  assign io_out = ~io_in; // @[cmd5.sc 6:10]
+endmodule
+
