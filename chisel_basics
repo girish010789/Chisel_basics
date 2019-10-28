@@ -6,7 +6,7 @@
 ## UInt is the data type with 4-bits wide. val is used to declare constant. 
 ## the following code implements the 4-bit NOT gate in chisel using scala primitives and constructs, but with chisel classes and user defined primitives/data-types.
 
-class Module_basic extends Module {
+class Modulebasic extends Module {
 val io = IO(new bundle {
   val in = Input(UInt(4,W))
   val out = Output(UInt(4,W))
@@ -15,12 +15,12 @@ val io = IO(new bundle {
 }
 
 ## the following statement is used to generate verilog code from chisel code. Running this code will generate the below output
-println(getVerilog(new Passthrough))
+println(getVerilog(new Modulebasic))
 
 [info] [0.000] Elaborating design...
 [info] [0.028] Done elaborating.
 Total FIRRTL Compile Time: 29.5 ms
-module cmd5HelperPassthrough(
+module cmd5HelperModulebasic(
   input        clock,
   input        reset,
   input  [3:0] io_in,
@@ -29,3 +29,18 @@ module cmd5HelperPassthrough(
   assign io_out = ~io_in; // @[cmd5.sc 6:10]
 endmodule
 
+
+## We can also get the FIRRTL (Flexible intermediate representation of RTL) using the following command
+println(getfirrtl(new Modulebasic))
+
+[info] [0.000] Elaborating design...
+[info] [0.002] Done elaborating.
+;buildInfoPackage: chisel3, version: 3.2-SNAPSHOT, scalaVersion: 2.12.10, sbtVersion: 1.3.2
+circuit cmd5HelperModulebasic : 
+  module cmd5HelperModulebasic: 
+    input clock : Clock
+    input reset : UInt<1>
+    output io : {flip in : UInt<4>, out : UInt<4>}
+    
+    io.out <= ~io.in @[cmd5.sc 6:10]
+ 
