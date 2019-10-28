@@ -1,0 +1,37 @@
+## add/sub/mul operation in chisel
+## one thing to make sure is not to mix chisel and scala type (i.e 1.U (chisel literal) + 1 (scala literal) will give 'type mismatch' error)
+
+
+class MyOperators extends Module {
+  val io = IO(new Bundle {
+    val in      = Input(UInt(4.W))
+    val out_add = Output(UInt(4.W))
+    val out_sub = Output(UInt(4.W))
+    val out_mul = Output(UInt(4.W))
+  })
+
+  io.out_add := 1.U + 4.U
+  io.out_sub := 2.U - 1.U
+  io.out_mul := 4.U * 2.U
+}
+println(getVerilog(new MyOperators))
+
+[info] [0.000] Elaborating design...
+[info] [0.038] Done elaborating.
+Total FIRRTL Compile Time: 55.0 ms
+module cmd4HelperMyOperators(
+  input        clock,
+  input        reset,
+  input  [3:0] io_in,
+  output [3:0] io_out_add,
+  output [3:0] io_out_sub,
+  output [3:0] io_out_mul
+);
+  wire [1:0] _T_3; // @[cmd4.sc 10:21]
+  wire [4:0] _T_4; // @[cmd4.sc 11:21]
+  assign _T_3 = 2'h2 - 2'h1; // @[cmd4.sc 10:21]
+  assign _T_4 = 3'h4 * 3'h2; // @[cmd4.sc 11:21]
+  assign io_out_add = 4'h5; // @[cmd4.sc 9:14]
+  assign io_out_sub = {{2'd0}, _T_3}; // @[cmd4.sc 10:14]
+  assign io_out_mul = _T_4[3:0]; // @[cmd4.sc 11:14]
+endmodule
